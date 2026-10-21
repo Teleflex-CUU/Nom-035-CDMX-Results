@@ -282,7 +282,7 @@ async function sincronizar(){
     const r=await fetch(GAS_URL+'?action=getAll',{redirect:'follow'});
     const d=await r.json();
     if(!d.ok)throw new Error(d.error||'Error GAS');
-    G2=d.grii||[];G3=d.griii||[];ATS=d.ats||[];
+    G2 = (d.grii || []).map(r => ({ ...r, nivel: nivelG2(+r.score || 0) })); G3 = (d.griii || []).map(r => {   const score = (!isNaN(+r.score)) ? +r.score : (!isNaN(+r.nivel) ? +r.nivel : 0);   return { ...r, score, nivel: nivelG3(score) }; }); ATS = d.ats || [];
     document.getElementById('cnt-g2').textContent=G2.length;
     document.getElementById('cnt-g3').textContent=G3.length;
     document.getElementById('cnt-ats').textContent=ATS.length;
